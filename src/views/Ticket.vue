@@ -58,7 +58,7 @@ export default {
       console.log("send message");
       this.ticket.messages.push({
         body: this.newMessage,
-        role: "user",
+        role: "agent",
       });
       this.newMessage = null;
       this.scrollToBottom();

@@ -1,17 +1,15 @@
 <template>
   <div class="messages-conatiner relative w-full max-w-screen-lg flex-1 m-auto p-8 my-4 pb-20">
     <div class="flex flex-col">
-      <div v-for="(message, index) in messages" :key="index" class="message rounded-lg py-2 px-6 mb-4" :class="message.role === 'assistant'
-          ? 'assistant bg-blue-100 border-blue-100 self-start'
-          : 'user bg-green-200 border-green-200 self-end'
-        ">
+      <div v-for="(message, index) in messages" :key="index" class="message rounded-lg py-2 px-6 mb-4" :class="getMessageClass(message)">
         <div class="w-full text-left">
+          <div class="font-bold">{{ getUserLabel(message) }}</div>
           {{ message.body }}
-          <div v-if="message.files" class="image-container">
+          <!-- <div v-if="message.files" class="image-container">
             <div v-for="file in message.files" class="image-box">
               <img :src="file.blob" alt="" />
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -27,6 +25,32 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  methods: {
+    getMessageClass({ role, type }) {
+      if(role === 'assistant') {
+        const className = 'assistant self-start';
+        if(type === 'summary') {
+          return `${className} summary bg-yellow-100 border-yellow-100`;
+        } else {
+          return `${className} bg-blue-200 border-blue-200`;
+        }
+      }
+      return 'user bg-green-200 border-green-200 self-end'
+    },
+    getUserLabel({ role, type }) {
+      if (role === 'assistant') {
+        if(type === 'summary') {
+          return '# Summary';
+        } else {
+          return 'Assistant';
+        }
+      }
+      if (role === 'user') {
+        return 'Customer'
+      }
+      return 'You';
+    }
   },
 };
 </script>
