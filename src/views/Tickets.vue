@@ -44,11 +44,11 @@
         <tbody>
           <tr
             v-for="ticket in tickets"
-            :key="ticket.id"
+            :key="ticket.ticketId"
             @click="
               $router.push({
                 name: 'ticket',
-                params: { id: ticket.id, model: ticket },
+                params: { id: ticket.ticketId },
               })
             "
             class="bg-white border-b cursor-pointer hover:bg-gray-50"
@@ -57,13 +57,13 @@
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              {{ ticket.id }}
+              {{ ticket.ticketId }}
             </th>
             <td class="px-6 py-4">
-              {{ ticket.title }}
+              {{ ticket.topic }}
             </td>
             <td class="px-6 py-4">
-              {{ ticket.status }}
+              {{ ticket.summary }}
             </td>
           </tr>
         </tbody>
@@ -78,76 +78,90 @@ export default {
   components: {},
   data() {
     return {
-      tickets: [
-        {
-          id: 1,
-          title: "Ticket 1",
-          description: "This is a ticket",
-          status: "open",
-          messages: [
-            {
-              id: 1,
-              body: "I need some help with this ticket",
-              ticketId: 1,
-              role: "user",
-            },
-            {
-              id: 2,
-              body: `Of course! I'm here to help. What do you need assistance with?`,
-              ticketId: 1,
-              role: "assistant",
-            },
-            {
-              id: 3,
-              body: "I need to find a job",
-              ticketId: 1,
-              role: "user",
-            },
-            {
-              id: 4,
-              body: `I'd be happy to help you with your job search. Here are some steps to get you started:
+      tickets: [],
+//       tickets: [
+//         {
+//           id: 1,
+//           title: "Ticket 1",
+//           description: "This is a ticket",
+//           status: "open",
+//           messages: [
+//             {
+//               id: 1,
+//               body: "I need some help with this ticket",
+//               ticketId: 1,
+//               role: "user",
+//             },
+//             {
+//               id: 2,
+//               body: `Of course! I'm here to help. What do you need assistance with?`,
+//               ticketId: 1,
+//               role: "assistant",
+//             },
+//             {
+//               id: 3,
+//               body: "I need to find a job",
+//               ticketId: 1,
+//               role: "user",
+//             },
+//             {
+//               id: 4,
+//               body: `I'd be happy to help you with your job search. Here are some steps to get you started:
 
-Update Your Resume: Ensure your resume is current, well-organized, and highlights your skills and experience.
+// Update Your Resume: Ensure your resume is current, well-organized, and highlights your skills and experience.
 
-Identify Your Skills and Interests: Determine what type of job you're looking for and what industries or roles align with your skills and interests.
+// Identify Your Skills and Interests: Determine what type of job you're looking for and what industries or roles align with your skills and interests.
 
-Use Online Job Boards: Websites like LinkedIn, Indeed, Glassdoor, and Monster are great places to search for job openings.
+// Use Online Job Boards: Websites like LinkedIn, Indeed, Glassdoor, and Monster are great places to search for job openings.
 
-Company Websites: Visit the websites of companies you're interested in to check for job postings. Many organizations post job listings on their career pages.
+// Company Websites: Visit the websites of companies you're interested in to check for job postings. Many organizations post job listings on their career pages.
 
-Networking: Connect with friends, family, and professional contacts. Let them know you're searching for a job; they might have leads or recommendations.
+// Networking: Connect with friends, family, and professional contacts. Let them know you're searching for a job; they might have leads or recommendations.
 
-LinkedIn: Create or update your LinkedIn profile. It's a powerful tool for networking and job searching.
+// LinkedIn: Create or update your LinkedIn profile. It's a powerful tool for networking and job searching.
 
-Recruitment Agencies: Consider working with recruitment agencies or headhunters. They can help match you with job opportunities.
+// Recruitment Agencies: Consider working with recruitment agencies or headhunters. They can help match you with job opportunities.
 
-Local Resources: Check with local job centers, career fairs, or community organizations. They often have job listings and career resources.
+// Local Resources: Check with local job centers, career fairs, or community organizations. They often have job listings and career resources.
 
-Customize Your Applications: Tailor your resume and cover letter for each job application. Highlight relevant skills and experience.
+// Customize Your Applications: Tailor your resume and cover letter for each job application. Highlight relevant skills and experience.
 
-Prepare for Interviews: Practice your interviewing skills. Be ready to discuss your qualifications and why you're a good fit for the position.
+// Prepare for Interviews: Practice your interviewing skills. Be ready to discuss your qualifications and why you're a good fit for the position.
 
-Online Training: Consider taking online courses or certifications to enhance your skills and make yourself more marketable.
+// Online Training: Consider taking online courses or certifications to enhance your skills and make yourself more marketable.
 
-Persistence: Job searching can take time. Be persistent, and don't get discouraged by rejection. Keep applying and networking.
+// Persistence: Job searching can take time. Be persistent, and don't get discouraged by rejection. Keep applying and networking.
 
-Follow-Up: After applying for jobs or attending interviews, send a polite follow-up email to express your continued interest.
+// Follow-Up: After applying for jobs or attending interviews, send a polite follow-up email to express your continued interest.
 
-If you have specific questions or need help with any of these steps, please let me know.`,
-              ticketId: 1,
-              role: "assistant",
-            },
-            {
-              id: 5,
-              body: `In the conversation above, a customer mentioned that they need to find a job. I provided a customer with a list of steps to help with their job search. These steps include updating a customer's resume, identifying their skills and interests, using online job boards, networking, creating or updating a customer's LinkedIn profile, considering recruitment agencies, checking local resources, customizing job applications, preparing for interviews, enhancing skills through online training, being persistent, and following up with potential employers. If a customer has any specific questions or needs further assistance, feel free to ask.`,
-              ticketId: 1,
-              role: "assistant",
-              type: "summary",
-            },
-          ],
-        },
-      ],
+// If you have specific questions or need help with any of these steps, please let me know.`,
+//               ticketId: 1,
+//               role: "assistant",
+//             },
+//             {
+//               id: 5,
+//               body: `In the conversation above, a customer mentioned that they need to find a job. I provided a customer with a list of steps to help with their job search. These steps include updating a customer's resume, identifying their skills and interests, using online job boards, networking, creating or updating a customer's LinkedIn profile, considering recruitment agencies, checking local resources, customizing job applications, preparing for interviews, enhancing skills through online training, being persistent, and following up with potential employers. If a customer has any specific questions or needs further assistance, feel free to ask.`,
+//               ticketId: 1,
+//               role: "assistant",
+//               type: "summary",
+//             },
+//           ],
+//         },
+//       ],
     };
+  },
+  beforeMount() {
+    this.getTickets();
+  },
+  methods: {
+    async getTickets() {
+      try {
+        const res = await this.$axios.get("/tickets");
+        this.tickets = res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>

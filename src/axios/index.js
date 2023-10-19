@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Create an Axios instance
 const instance = axios.create({
-  baseURL: "https://api.example.com", // Replace with your API base URL
+  baseURL: "http://localhost:8000", // Replace with your API base URL
 });
 
 // Request interceptor

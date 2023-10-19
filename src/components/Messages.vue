@@ -1,10 +1,16 @@
 <template>
   <div class="messages-conatiner relative w-full max-w-screen-lg flex-1 m-auto p-8 my-4 pb-20">
     <div class="flex flex-col">
+      <div class="message summary rounded-lg py-2 px-6 mb-4" :class="getMessageClass({role: 'summary'})">
+        <div class="w-full text-left">
+          <div class="font-bold"># Summary</div>
+          {{ summary }}
+        </div>
+      </div>
       <div v-for="(message, index) in messages" :key="index" class="message rounded-lg py-2 px-6 mb-4" :class="getMessageClass(message)">
         <div class="w-full text-left">
           <div class="font-bold">{{ getUserLabel(message) }}</div>
-          {{ message.body }}
+          {{ message.message }}
           <!-- <div v-if="message.files" class="image-container">
             <div v-for="file in message.files" class="image-box">
               <img :src="file.blob" alt="" />
@@ -25,17 +31,21 @@ export default {
       type: Array,
       required: true,
     },
+    summary: {
+      type: String,
+      required: false,
+      default: ''
+    }
   },
   methods: {
-    getMessageClass({ role, type }) {
+    getMessageClass({ role }) {
       if(role === 'assistant') {
-        const className = 'assistant self-start';
-        if(type === 'summary') {
-          return `${className} summary bg-yellow-100 border-yellow-100`;
-        } else {
-          return `${className} bg-blue-200 border-blue-200`;
-        }
+        return 'assistant self-start bg-blue-200 border-blue-200';
       }
+      if (role === 'summary') {
+        return 'assistant self-start summary bg-yellow-100 border-yellow-100'
+      }
+
       return 'user bg-green-200 border-green-200 self-end'
     },
     getUserLabel({ role, type }) {
@@ -65,6 +75,10 @@ export default {
   .message {
     position: relative;
     max-width: 96%;
+
+    &.summary {
+      min-width: 100%;
+    }
 
     &::after {
       content: "";

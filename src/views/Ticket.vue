@@ -1,15 +1,17 @@
 <template>
-  <div class="h-full ticket">
+  <div v-if="loading">Loading...</div>
+  <div v-else class="h-full ticket">
     <div class="h-full bg-gray-50 flex flex-col" x-data="chat">
       <div class="relative">
         <div class="flex justify-center p-4" style="background-color: #e30010">
           <span class="text-white text-bold flex content-center">
-            <img src="@/assets/_logo.svg" height="40px" width="40px" />
+            <h1 class="text-2xl">Ticket #{{ ticket.id }} - {{ ticket.topic }}</h1>
+            <!-- <img src="@/assets/_logo.svg" height="40px" width="40px" /> -->
           </span>
         </div>
       </div>
     </div>
-    <messages :messages="ticket.messages" />
+    <messages :messages="messages" :summary="ticket.summary" />
     <div class="fixed inset-x-0 bottom-0 bg-gray-200">
       <div
         class="max-w-screen-lg m-auto w-full p-4 flex space-x-4 justify-center items-center"
@@ -48,16 +50,34 @@ export default {
     return {
       ticket: null,
       newMessage: null,
+      loading: false,
     };
   },
-  beforeMount() {
-    this.ticket = this.$route.params.model;
+
+  computed: {
+    messages() {
+      return this.ticket?.chat?.chatMessages || [];
+    }
   },
+
+  async beforeMount() {
+    this.loading = true;
+    try {
+      const res = await this.$axios.get(`/tickets/${this.$route.params.id}`);
+      this.ticket = res.data;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.loading = false;
+      this.scrollToBottom();
+    }
+  },
+
   methods: {
     sendMessage() {
       console.log("send message");
-      this.ticket.messages.push({
-        body: this.newMessage,
+      this.ticket.chat.chatMessages.push({
+        message: this.newMessage,
         role: "agent",
       });
       this.newMessage = null;
@@ -65,7 +85,7 @@ export default {
     },
     scrollToBottom() {
       setTimeout(() => {
-        const container = document.querySelector(".messages-conatiner");
+        const container = document.querySelector("html");
         container.scrollTop = container.scrollHeight;
       }, 100);
     },
