@@ -10,7 +10,7 @@
       <div v-for="(message, index) in messages" :key="index" class="message rounded-lg py-2 px-6 mb-4" :class="getMessageClass(message)">
         <div class="w-full text-left">
           <div class="font-bold">{{ getUserLabel(message) }}</div>
-          {{ message.message }}
+          <div v-html="message.message"></div>
           <!-- <div v-if="message.files" class="image-container">
             <div v-for="file in message.files" class="image-box">
               <img :src="file.blob" alt="" />
